@@ -2,7 +2,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { Box } from 'native-base'
 import { AuthRoutes } from './auth.routes'
 import { useAuth } from '@hooks/useAuth'
-import { AppRoutes } from './app.routes'
+import { TabRoutes } from './tab.routes'
 
 export function Routes() {
     const { isLogged } = useAuth()
@@ -13,7 +13,7 @@ export function Routes() {
     return (
         <Box flex={1} bg="#FFFFFF">
             <NavigationContainer theme={theme}>
-                {isLogged ? <AppRoutes /> : <AuthRoutes />}
+                {isLogged ? <TabRoutes /> : <AuthRoutes />}
             </NavigationContainer>
         </Box>
     )

@@ -2,6 +2,8 @@ import { HStack, Image, Pressable, Text } from "native-base";
 import { Clock } from 'phosphor-react-native'
 import { formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigationRoutesProps } from "@routes/tab.routes";
 
 interface NewsCardProps {
     imageUrl: string;
@@ -13,9 +15,10 @@ interface NewsCardProps {
 }
 
 export function NewsCard({ createdAt, imageUrl, owner, title, author, url }: NewsCardProps){
+    const navigation = useNavigation<AppNavigationRoutesProps>()
     
     function handleOpenNews(){
-        
+        navigation.navigate('newsPage', { url: url })
     }
 
     return(
@@ -35,6 +38,7 @@ export function NewsCard({ createdAt, imageUrl, owner, title, author, url }: New
                     })}
                 </Text>
             </HStack>
+            
         </Pressable>
     )
 }
