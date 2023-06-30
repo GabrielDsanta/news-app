@@ -1,7 +1,6 @@
 import { HStack, Image, Pressable, Text } from "native-base";
 import { Clock } from 'phosphor-react-native'
 import { formatDistanceToNow } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigationRoutesProps } from "@routes/tab.routes";
 
@@ -33,8 +32,7 @@ export function NewsCard({ createdAt, imageUrl, owner, title, author, url }: New
                 <Clock color="#4E4B66" size={18}  />
                 <Text ml={1} color="gray.500" fontSize="15px" fontFamily="body">
                     {formatDistanceToNow(new Date(createdAt), {
-                        addSuffix: true,
-                        locale: ptBR
+                        addSuffix: true
                     })}
                 </Text>
             </HStack>

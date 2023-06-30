@@ -6,14 +6,12 @@ import { HouseLine, Compass, BookmarkSimple, UserCircle } from 'phosphor-react-n
 import { History } from '@screens/History';
 import { Profile } from '@screens/Profile';
 import { Exercise } from '@screens/Exercise';
-import { NewsPage } from '@screens/NewsPage';
 
 type AppRoutesType = {
     home: undefined;
-    history: undefined;
+    explore: undefined;
+    saved: undefined;
     profile: undefined;
-    exercise: { exerciseId: string; };
-    newsPage: { url: string; };
 }
 
 export type AppNavigationRoutesProps = BottomTabNavigationProp<AppRoutesType>
@@ -56,7 +54,7 @@ export function TabRoutes() {
             />
 
             <Screen
-                name='history'
+                name='explore'
                 component={History}
                 options={
                     {
@@ -68,7 +66,7 @@ export function TabRoutes() {
             />
 
             <Screen
-                name='profile'
+                name='saved'
                 component={Profile}
                 options={
                     {
@@ -80,7 +78,7 @@ export function TabRoutes() {
             />
 
             <Screen
-                name='exercise'
+                name='profile'
                 component={Exercise}
                 options={
                     {
@@ -89,11 +87,6 @@ export function TabRoutes() {
                         )
                     }
                 }
-            />
-
-            <Screen
-                name='newsPage'
-                component={NewsPage}
             />
         </Navigator>
     )

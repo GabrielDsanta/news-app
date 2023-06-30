@@ -6,17 +6,13 @@ interface NewsPageParams {
     url: string;
 }
 
-
 export function NewsPage(){
     const route = useRoute();
 
     const { url } = route.params as NewsPageParams;
 
-    console.log(url)
-
-
     return(
-        <View flex={1}>
+        <View mt={20} flex={1}>
             <WebView
                 style={{
                     justifyContent: 'center',
@@ -26,7 +22,6 @@ export function NewsPage(){
                 javaScriptEnabled
                 startInLoadingState
                 source={{ uri: url }}
-                onLoad={() => console.log('Página carregada')}
             />
         </View>
     )

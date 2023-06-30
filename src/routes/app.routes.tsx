@@ -1,26 +1,37 @@
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NewsPage } from '@screens/NewsPage';
+import { TabRoutes } from './tab.routes';
 
-
-type AppRoutesType = {
-    newsPage: { url: string; };
-}
-
-export type AppStackNavigationRoutesProps = NativeStackNavigationProp<AppRoutesType>
-
-const { Screen, Navigator } = createNativeStackNavigator<AppRoutesType>()
+const { Navigator, Screen } = createNativeStackNavigator();
 
 export function AppRoutes() {
+  return (
+    <Navigator
+      initialRouteName="TabRoutes"
+      screenOptions={{
+        headerShown: false,
+        headerTransparent: true,
+      }}
+    >
 
-    return (
-        <Navigator screenOptions={{ headerShown: false }}>
-            <Screen
-                name='newsPage'
-                component={NewsPage}
-            />
+      <Screen
+        name="home"
+        component={TabRoutes}
+        options={{
+          headerShown: false,
+        }}
+      />
 
-        </Navigator>
-    )
+      <Screen
+        name="newsPage"
+        component={NewsPage}
+        options={{
+          headerShown: true,
+          title: 'Notícias'
+        }}
+      />
+
+    </Navigator>
+  );
 }
-
-

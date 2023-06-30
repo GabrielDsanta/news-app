@@ -11,6 +11,7 @@ export function HeaderHome(){
             <HStack h={12} mt={10} rounded={6} px={2} borderWidth="1" borderColor="gray.500" alignItems="center">
                 <MagnifyingGlass color="#4E4B66" size={20} />
                 <Input  
+                    mt={1}
                     borderWidth="0"
                     bg="transparent"
                     placeholder="Search"
