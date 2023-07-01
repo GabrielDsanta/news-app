@@ -12,6 +12,7 @@ type AppRoutesType = {
     explore: undefined;
     saved: undefined;
     profile: undefined;
+    newsPage: { url: string };
 }
 
 export type AppNavigationRoutesProps = BottomTabNavigationProp<AppRoutesType>
@@ -47,8 +48,7 @@ export function TabRoutes() {
                     {
                         tabBarIcon: ({ color }) => (
                             <HouseLine color={color} size={iconSize} />
-                        ),
-                        tabBarLabel: "Home"
+                        )
                     }
                 }
             />
