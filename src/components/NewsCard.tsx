@@ -28,7 +28,7 @@ export function NewsCard({ createdAt, imageUrl, owner, title, author, url }: New
             <Text color="black" fontSize="16px" fontFamily="body">{title}</Text>
 
             <HStack mt={1} alignItems="center">
-                <Text mr={4} color="gray.500" fontSize="16px" fontFamily="heading">{author}</Text>
+                <Text numberOfLines={1} maxW="235px" mr={4} color="gray.500" fontSize="16px" fontFamily="heading">{author}</Text>
                 <Clock color="#4E4B66" size={18}  />
                 <Text ml={1} color="gray.500" fontSize="15px" fontFamily="body">
                     {formatDistanceToNow(new Date(createdAt), {

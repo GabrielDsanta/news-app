@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StorageUserGet } from '@storage/storageUser';
 import { useAuth } from '@hooks/useAuth';
 import { AuthNavigationRoutesProps } from '@routes/auth.routes';
+import { Loading } from '@components/Loading';
 
 type FormDataProps = {
     username: string;
@@ -21,10 +22,10 @@ const ValidationSchemaForm = yup.object({
 })
 
 export function SignIn() {
-    const { setIsLogged } = useAuth()
+    const { setIsLogged, isFetchingData } = useAuth()
     const [isLoading, setIsLoading] = useState(false)
 
-    const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
+    const { control, handleSubmit, formState: { errors }, setValue } = useForm<FormDataProps>({
         resolver: yupResolver(ValidationSchemaForm)
     })
 
@@ -52,53 +53,61 @@ export function SignIn() {
     
     return (
         <ScrollView>
-            <View px={6} mt={12}>
-                <Text fontFamily="heading" fontSize="48px" color="gray.600">Hello</Text>
-                <Text fontFamily="heading" fontSize="48px" color="blue.700">Again!</Text>
-                <Text mt={1} w="64" fontSize="22px" fontFamily="mono" color="gray.500">Welcome back you’ve been missed</Text>
-            </View>
+            {isFetchingData ? (
+                <Center>
+                    <Loading />
+                </Center>
+            ): (
+                <>
+                    <View px={6} mt={12}>
+                        <Text fontFamily="heading" fontSize="48px" color="gray.600">Hello</Text>
+                        <Text fontFamily="heading" fontSize="48px" color="blue.700">Again!</Text>
+                        <Text mt={1} w="64" fontSize="22px" fontFamily="mono" color="gray.500">Welcome back you’ve been missed</Text>
+                    </View>
 
-            <VStack px={6} alignItems="center" justifyContent="center" mt={8}>
+                    <VStack px={6} alignItems="center" justifyContent="center" mt={8}>
 
-                <Controller
-                    control={control}
-                    name="username"
-                    render={({ field: { onChange, value } }) => (
-                        <Input
-                            label="Username"
-                            onChangeText={onChange}
-                            value={value}
-                            errorMessage={errors.username?.message}
+                        <Controller
+                            control={control}
+                            name="username"
+                            render={({ field: { onChange, value } }) => (
+                                <Input
+                                    label="Username"
+                                    onChangeText={onChange}
+                                    value={value}
+                                    errorMessage={errors.username?.message}
+                                />
+                            )}
                         />
-                    )}
-                />
 
-                <Controller
-                    control={control}
-                    name="password"
-                    render={({ field: { onChange, value } }) => (
-                        <Input
-                            type='password'
-                            label="Password"
-                            onChangeText={onChange}
-                            value={value}
-                            errorMessage={errors.password?.message}
+                        <Controller
+                            control={control}
+                            name="password"
+                            render={({ field: { onChange, value } }) => (
+                                <Input
+                                    type='password'
+                                    label="Password"
+                                    onChangeText={onChange}
+                                    value={value}
+                                    errorMessage={errors.password?.message}
+                                />
+                            )}
                         />
-                    )}
-                />
 
-                <Button 
-                    onPress={handleSubmit(handleSignIn)} 
-                    mt={4} 
-                    text="Login" 
-                    isLoading={isLoading ? true : false}
-                    />
-            </VStack>
+                        <Button 
+                            onPress={handleSubmit(handleSignIn)} 
+                            mt={4} 
+                            text="Login" 
+                            isLoading={isLoading ? true : false}
+                        />
+                    </VStack>
 
-            <Center mt={4} flexDirection="row">
-                <Text fontFamily="mono" color="gray.400" fontSize="16px">don’t have an account ? </Text> 
-                <Text onPress={() => navigation.navigate("signUp")} fontFamily="heading" color="blue.700" fontSize="16px">Sign Up</Text>
-            </Center>
+                    <Center mt={4} flexDirection="row">
+                        <Text fontFamily="mono" color="gray.400" fontSize="16px">don’t have an account ? </Text> 
+                        <Text onPress={() => navigation.navigate("signUp")} fontFamily="heading" color="blue.700" fontSize="16px">Sign Up</Text>
+                    </Center>
+                </>
+            )}
         </ScrollView>
     );
 }

@@ -1,11 +1,11 @@
-import { StorageUserGet, StorageUserRemove } from "@storage/storageUser";
+import { StorageUserGet } from "@storage/storageUser";
 import { ReactNode, createContext, useState, useEffect } from "react";
 
 export type AuthContextDataProps = {
     isLogged: boolean;
     setIsLogged: (bool: boolean) => void;
-    SignIn: (username: string, password: string) => Promise<void>;
     SignOut: () => Promise<void>;
+    isFetchingData: boolean;
 }
 
 export const AuthContext = createContext<AuthContextDataProps>({} as AuthContextDataProps)
@@ -16,38 +16,23 @@ type AuthContextProviderProps = {
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
     const [isLoadingStorageData, setIsLoadingStorageData] = useState(true)
+    const [isFetchingData, setIsFetchingData] = useState(false)
     const [isLogged, setIsLogged] = useState(false)
 
-    async function SignIn(email: string, password: string) {
-        try {
-            await StorageUserGet()
-        } catch (error) {
-            throw error
-        } finally {
-            setIsLoadingStorageData(false)
-        }
-    }
-
     async function SignOut() {
-        try {
-            setIsLoadingStorageData(true)
-
-            await StorageUserRemove()
-
-        } catch (error) {
-            throw error
-        } finally {
-            setIsLoadingStorageData(false)
-        }
+        setIsLogged(false)
     }
 
     useEffect(() => {
         async function loadDataUser(){
+            setIsFetchingData(true)
             const user = await StorageUserGet()
 
             if(user){
                 setIsLogged(true)
             }
+
+            setIsFetchingData(false)
         }
 
         loadDataUser()
@@ -58,8 +43,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
             value={{
                 isLogged,
                 setIsLogged,
-                SignIn,
                 SignOut,
+                isFetchingData
             }}
         >
             {children}

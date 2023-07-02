@@ -7,7 +7,6 @@ import * as yup from 'yup'
 import { Button } from "@components/Button";
 import { AuthNavigationRoutesProps } from "@routes/auth.routes";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from '@hooks/useAuth';
 import { StorageUserSave } from '@storage/storageUser';
 
 type FormDataProps = {
@@ -21,7 +20,6 @@ const ValidationSchemaForm = yup.object({
 })
 
 export function SignUp() {
-    const { SignIn } = useAuth()
     const [isLoading, setIsLoading] = useState(false)
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
