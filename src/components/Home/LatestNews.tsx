@@ -1,9 +1,13 @@
 import { FlatList, Pressable, Text, View } from "native-base";
 import { FilterList } from "../../data/FilterList";
-import { useState } from "react";
+import uuid from "react-native-uuid"
 
-export function LatestNews(){
-    const [selectedCategory, setSelectedCategory] = useState("business")
+interface LatestNewsProps {
+    selectedCategory: string;
+    setSelectedCategory: (category: string) => void;
+}
+
+export function LatestNews({ setSelectedCategory, selectedCategory }: LatestNewsProps){
 
     function handleSelectCategory(categoryName: string) {
         const category = selectedCategory === categoryName ? '' : categoryName
@@ -17,20 +21,20 @@ export function LatestNews(){
             <FlatList
                 renderItem={({ item }) => (
                     <Pressable
-                        onPress={() => handleSelectCategory(item)} 
-                        borderBottomColor={selectedCategory === item ? "blue.700" : ""}
-                        borderBottomWidth={selectedCategory === item ? 1 : 0}
+                        onPress={() => handleSelectCategory(item.category)} 
+                        borderBottomColor={selectedCategory === item.category ? "blue.700" : ""}
+                        borderBottomWidth={selectedCategory === item.category ? 1 : 0}
                         pb={1}
                     >
-                        <Text fontFamily="mono" fontSize="17px" color={selectedCategory === item ? "black" : "gray.500"}>{item}</Text>
+                        <Text fontFamily="mono" fontSize="17px" color={selectedCategory === item.category ? "black" : "gray.500"}>{item.category}</Text>
                     </Pressable>
                 )}
+                keyExtractor={(item) => String(item.id) + uuid.v4()}
                 data={FilterList}
                 ItemSeparatorComponent={() => (
                     <View ml={4}>
                     </View>
                 )}
-                keyExtractor={(item) => item}
                 horizontal
                 showsHorizontalScrollIndicator={false}
             />

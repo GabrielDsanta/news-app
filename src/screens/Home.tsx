@@ -1,4 +1,5 @@
 import {
+  Center,
   FlatList,
   HStack,
   Image,
@@ -11,7 +12,6 @@ import {
 
 import { useEffect, useState } from "react";
 import { api } from "../service/api";
-import { NewsCard } from "@components/NewsCard";
 import { Loading } from "@components/Loading";
 import { LatestNews } from "@components/Home/LatestNews";
 import { Clock, MagnifyingGlass } from "phosphor-react-native";
@@ -19,6 +19,9 @@ import { formatDistanceToNow } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigationRoutesProps } from "@routes/tab.routes";
 import Logo from "@assets/Logo.svg";
+import NewsThumb from "@assets/newsPng.png";
+import uuid from 'react-native-uuid'
+import { HeaderList } from "@components/Home/HeaderList";
 
 export function Home() {
   const navigation = useNavigation<AppNavigationRoutesProps>();
@@ -26,18 +29,24 @@ export function Home() {
   const [news, setNews] = useState<Article[]>([]);
   const [filteredNews, setFilteredNews] = useState<Article[]>([]);
   const [topHeadline, setTopHeadline] = useState<Article | null>(null);
+
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("business")
+  const [isLoading, setIsLoading] = useState(false)
 
   function handleOpenNews(url: string) {
     navigation.navigate("newsPage", { url: url });
   }
 
   useEffect(() => {
-    api.get("/everything?q=*").then((response) => {
-      setTopHeadline(response.data.articles[50]);
+    setIsLoading(true)
+
+    api.get(`/everything?q=${selectedCategory}`).then((response) => {
+      setTopHeadline(response.data.articles[30]);
       setNews(response.data.articles);
+      setIsLoading(false)
     });
-  }, []);
+  }, [selectedCategory]);
 
   useEffect(() => {
     if (search !== "") {
@@ -81,39 +90,12 @@ export function Home() {
 
       <FlatList
         ListHeaderComponent={
-          search === "" ? (
-            <>
-              <Text
-                color="black"
-                fontFamily="heading"
-                mt={6}
-                mb={2}
-                fontSize="16px">
-                Trending
-              </Text>
-
-              {topHeadline === null ? (
-                <Loading />
-              ) : (
-                <NewsCard
-                  url={topHeadline!.url}
-                  author={topHeadline!.author}
-                  imageUrl={topHeadline!.urlToImage!}
-                  createdAt={topHeadline!.publishedAt!}
-                  owner={topHeadline!.source.name}
-                  title={topHeadline!.title}
-                  key={topHeadline!.source.id}
-                />
-              )}
-
-              <LatestNews />
-            </>
-          ) : (
-            <></>
-          )
-        }
-        renderItem={({ item }) => (
           <>
+            <HeaderList search={search} topHeadline={topHeadline} key={String(uuid.v4())} />
+            <LatestNews selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} key={String(uuid.v4())} />
+          </>
+        }
+        renderItem={({ item }) => !isLoading ? (
             <Pressable
               onPress={() => handleOpenNews(item.url)}
               mt={8}
@@ -123,7 +105,7 @@ export function Home() {
                 rounded={4}
                 width={24}
                 height={24}
-                source={{ uri: item.urlToImage }}
+                source={item.urlToImage === null ? NewsThumb : { uri: item.urlToImage }}
               />
 
               <VStack maxW="250px" ml={2}>
@@ -151,18 +133,25 @@ export function Home() {
                 </HStack>
               </VStack>
             </Pressable>
-          </>
+        
+        ): (
+          <Center flex={1} mt="20" mb="32">
+            <Loading />
+          </Center>
         )}
         data={filteredNews.length > 0 ? filteredNews : news}
         initialNumToRender={5}
         maxToRenderPerBatch={2}
-        keyExtractor={(item) => item.content}
+        keyExtractor={(item) => item.content + uuid.v4()}
         showsVerticalScrollIndicator={false}
-        ListFooterComponent={() => (
+        ListFooterComponent={search.length === 0 ? (
           <View mt={6}>
             <Loading />
           </View>
-        )}
+        ): 
+          <>
+          </>
+        }
       />
     </View>
   );

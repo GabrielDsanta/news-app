@@ -1,7 +1,5 @@
-// import { StorageAuthTokenGet, StorageAuthTokenRemove, StorageAuthTokenSave } from "@storage/storageAuthToken";
-// import { StorageUserGet, StorageUserSave, StorageUserRemove } from "@storage/storageUser";
 import { StorageUserGet, StorageUserRemove } from "@storage/storageUser";
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useState, useEffect } from "react";
 
 export type AuthContextDataProps = {
     isLogged: boolean;
@@ -22,7 +20,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
     async function SignIn(email: string, password: string) {
         try {
-            const user = await StorageUserGet()
+            await StorageUserGet()
         } catch (error) {
             throw error
         } finally {
@@ -42,6 +40,18 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
             setIsLoadingStorageData(false)
         }
     }
+
+    useEffect(() => {
+        async function loadDataUser(){
+            const user = await StorageUserGet()
+
+            if(user){
+                setIsLogged(true)
+            }
+        }
+
+        loadDataUser()
+    }, [])
 
     return (
         <AuthContext.Provider

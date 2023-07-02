@@ -16,7 +16,7 @@ export function AppRoutes() {
     >
 
       <Screen
-        name="home"
+        name="tab"
         component={TabRoutes}
         options={{
           headerShown: false,
